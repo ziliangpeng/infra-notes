@@ -66,6 +66,16 @@ Env: VLLM_ROCM_USE_AITER=0, AITER_MOE=0, AITER_MLA=1 (master flag off; sub-flags
 Status: RUNNING (pod loading weights, ~12 min ETA).
 Open question: with master AITER=0, will backend selector fall back to TRITON_MLA for MLA path? And will TP=1 (no head sharding) avoid the num_heads%16 issue via the non-AITER path?
 
+## Attempt 8 — TP=8, block-size=32, all AITER off, TRITON_MLA forced, --enforce-eager
+Env: VLLM_ROCM_USE_AITER=0, AITER_MOE=0, AITER_MLA=0, VLLM_ATTENTION_BACKEND=TRITON_MLA
+Error: SAME `AssertionError: assert num_head_qo % 16 == 0`.
+vLLM log still shows:
+```
+Using ROCM_AITER_MLA backend out of potential backends:
+['ROCM_AITER_MLA', 'TRITON_MLA', 'ROCM_AITER_TRITON_MLA']
+```
+**Critical finding**: v0.19.1 ROCm backend selector hardcodes ROCM_AITER_MLA and ignores BOTH VLLM_ROCM_USE_AITER_MLA=0 AND VLLM_ATTENTION_BACKEND=TRITON_MLA. TP-with-MLA path on v0.19.1 is a dead-end regardless of env.
+
 ## Open questions to investigate later
 1. Why VLLM_ROCM_USE_AITER_MLA=0 and VLLM_ATTENTION_BACKEND=TRITON_MLA were both ignored in v0.19.1 ROCm (attempts 3, 4).
 2. Whether K2.6's 384-expert grouped_topk can be forced down the non-AITER path while still using AITER_MOE for the fused expert compute.
