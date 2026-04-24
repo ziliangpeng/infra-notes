@@ -77,5 +77,5 @@ dynamic `world_size`. Launch.sh provides IB env vars.
 ## Open items
 
 - [x] Propagate fix to canonical `20260327-llama-1b-multinode` project — done 2026-04-23, commit `903c673`. Verified 1×8 502k, 2×8 980k.
-- [ ] Test 4-node scaling (currently only 2-node validated, requires releasing holds + reserving 4 nodes)
+- [x] Test 4-node scaling — done 2026-04-24 on pi1-h100-23,27,29,31 (job 10687). **1,960,000 tok/s / 97.4% scaling / 61,250 per-GPU — identical per-GPU to 2-node, no compounding loss.**
 - [x] Update skill `h100-multinode-nccl` with per-rank pipeline lesson — done, case study added.
