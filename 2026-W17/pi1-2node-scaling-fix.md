@@ -76,6 +76,6 @@ dynamic `world_size`. Launch.sh provides IB env vars.
 
 ## Open items
 
-- [ ] Propagate fix to canonical `20260327-llama-1b-multinode` project
+- [x] Propagate fix to canonical `20260327-llama-1b-multinode` project — done 2026-04-23, commit `903c673`. Verified 1×8 502k, 2×8 980k.
 - [ ] Test 4-node scaling (currently only 2-node validated, requires releasing holds + reserving 4 nodes)
-- [ ] Update skill `h100-multinode-nccl` with per-rank pipeline lesson
+- [x] Update skill `h100-multinode-nccl` with per-rank pipeline lesson — done, case study added.
